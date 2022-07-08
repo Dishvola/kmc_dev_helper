@@ -1,0 +1,7 @@
+name: 'KMC Dev Helper'
+type: module
+description: 'Provides helper services to work with a new features.'
+core_version_requirement: '^9'
+package: KMC
+dependencies:
+  - salesforce_mapping
