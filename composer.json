@@ -1,6 +1,6 @@
 {
   "name": "dishvola/kmc_dev_helper",
-  "type": "custom-drupal-module",
+  "type": "drupal-module",
   "description": "KMC Dev Helper",
   "homepage": "https://github.com/Dishvola/kmc_dev_helper",
   "minimum-stability": "dev",
