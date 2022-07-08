@@ -1,0 +1,16 @@
+{
+  "name": "dishvola/kmc_dev_helper",
+  "type": "custom-drupal-module",
+  "description": "KMC Dev Helper",
+  "homepage": "https://github.com/Dishvola/kmc_dev_helper",
+  "minimum-stability": "dev",
+  "support": {
+    "issues": "https://github.com/Dishvola/kmc_dev_helper/issues",
+    "source": "https://github.com/Dishvola/kmc_dev_helper"
+  },
+  "autoload": {
+    "psr-4": {
+      "Drupal\\kmc_dev_helper\\": "src/"
+    }
+  }
+}
