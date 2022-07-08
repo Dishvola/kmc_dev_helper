@@ -129,14 +129,22 @@ class DevHelperBase extends \Drupal implements DevHelperInterface, ContainerInje
    * {@inheritdoc}
    */
   public function orgLoad($id) {
-    return Org::load($id);
+    $org = NULL;
+    if (is_numeric($id)) {
+      $org = Org::load($id);
+    }
+    return $org;
   }
 
   /**
    * {@inheritdoc}
    */
   public function contactLoad($id) {
-    return Contact::load($id);
+    $contact = NULL;
+    if (is_numeric($contact)) {
+      $contact = Contact::load($contact);
+    }
+    return $contact;
   }
 
   /**
