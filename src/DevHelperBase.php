@@ -141,8 +141,8 @@ class DevHelperBase extends \Drupal implements DevHelperInterface, ContainerInje
    */
   public function contactLoad($id) {
     $contact = NULL;
-    if (is_numeric($contact)) {
-      $contact = Contact::load($contact);
+    if (is_numeric($id)) {
+      $contact = Contact::load($id);
     }
     return $contact;
   }
