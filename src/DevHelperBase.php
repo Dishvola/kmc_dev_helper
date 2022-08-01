@@ -154,13 +154,13 @@ class DevHelperBase extends \Drupal implements DevHelperInterface, ContainerInje
     $sf_id = '';
     /** @var \Drupal\salesforce_mapping\MappedObjectStorage $mapped_object_storage */
     $mapped_object_storage = $this->entityTypeManager->getStorage('salesforce_mapped_object');
-    $entity_smo_array = $mapped_object_storage->loadByEntity($entity);
-    $entity_smo = reset($entity_smo_array);
-    if ($entity_smo instanceof MappedObject
-      && $entity_smo->hasField('salesforce_id')
-      && !$entity_smo->get('salesforce_id')->isEmpty()
+    $smo_array = $mapped_object_storage->loadByEntity($entity);
+    $smo = reset($smo_array);
+    if ($smo instanceof MappedObject
+      && $smo->hasField('salesforce_id')
+      && !$smo->get('salesforce_id')->isEmpty()
     ) {
-      $sf_id = $entity_smo->salesforce_id->value;
+      $sf_id = $smo->sfid();
     }
 
     return $sf_id;
