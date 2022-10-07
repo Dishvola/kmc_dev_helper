@@ -34,6 +34,17 @@ interface DevHelperInterface {
   public function getConfig(string $name): ImmutableConfig;
 
   /**
+   * Load Drupal User by id.
+   *
+   * @param mixed $id
+   *   Drupal User ID.
+   *
+   * @return mixed
+   *   User entity or NULL.
+   */
+  public function userLoad($id);
+
+  /**
    * Load Redhen Organization by id.
    *
    * @param mixed $id
@@ -54,6 +65,28 @@ interface DevHelperInterface {
    *   Contact entity or NULL.
    */
   public function contactLoad($id);
+
+  /**
+   * Load Redhen Connection by id.
+   *
+   * @param mixed $id
+   *   Redhen Connection ID.
+   *
+   * @return mixed
+   *   Connection entity (redhen_connection) or NULL.
+   */
+  public function connectionRedhenLoad($id);
+
+  /**
+   * Load Group Connection by id.
+   *
+   * @param mixed $id
+   *   Group Connection ID.
+   *
+   * @return mixed
+   *   Connection entity (group_content) or NULL.
+   */
+  public function connectionGroupLoad($id);
 
   /**
    * Get SF ID string by Entity object.

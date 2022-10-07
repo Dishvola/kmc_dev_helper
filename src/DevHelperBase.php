@@ -12,9 +12,12 @@ use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Messenger\MessengerInterface;
+use Drupal\group\Entity\GroupContent;
+use Drupal\redhen_connection\Entity\Connection;
 use Drupal\redhen_contact\Entity\Contact;
 use Drupal\redhen_org\Entity\Org;
 use Drupal\salesforce_mapping\Entity\MappedObject;
+use Drupal\user\Entity\User;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -128,6 +131,17 @@ class DevHelperBase extends \Drupal implements DevHelperInterface, ContainerInje
   /**
    * {@inheritdoc}
    */
+  public function userLoad($id) {
+    $user = NULL;
+    if (is_numeric($id)) {
+      $user = User::load($id);
+    }
+    return $user;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function orgLoad($id) {
     $org = NULL;
     if (is_numeric($id)) {
@@ -143,6 +157,28 @@ class DevHelperBase extends \Drupal implements DevHelperInterface, ContainerInje
     $contact = NULL;
     if (is_numeric($id)) {
       $contact = Contact::load($id);
+    }
+    return $contact;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function connectionRedhenLoad($id) {
+    $contact = NULL;
+    if (is_numeric($id)) {
+      $contact = Connection::load($id);
+    }
+    return $contact;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function connectionGroupLoad($id) {
+    $contact = NULL;
+    if (is_numeric($id)) {
+      $contact = GroupContent::load($id);
     }
     return $contact;
   }
