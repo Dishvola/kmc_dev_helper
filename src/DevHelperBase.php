@@ -165,11 +165,11 @@ class DevHelperBase extends \Drupal implements DevHelperInterface, ContainerInje
    * {@inheritdoc}
    */
   public function connectionRedhenLoad($id) {
-    $contact = NULL;
+    $connection = NULL;
     if (is_numeric($id)) {
-      $contact = Connection::load($id);
+      $connection = Connection::load($id);
     }
-    return $contact;
+    return $connection;
   }
 
   /**
