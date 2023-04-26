@@ -135,7 +135,7 @@ interface DevHelperInterface {
   public function connectionRedhenLoad(mixed $id);
 
   /**
-   * Load Redhen Connection by id.
+   * Load Redhen Connection by pair Contact + Org.
    *
    * @param mixed $contact
    *   Redhen Contact entity or Redhen Contact ID.
@@ -198,15 +198,93 @@ interface DevHelperInterface {
   public function connectionsRedhenLoadByCurrentOrg(bool $active = TRUE);
 
   /**
-   * Load Group Connection by id.
+   * Load Group by id.
    *
    * @param mixed $id
-   *   Group Connection ID.
+   *   Group ID.
    *
    * @return mixed
-   *   Connection entity (group_content) or NULL.
+   *   Group entity or NULL.
    */
-  public function connectionGroupLoad(mixed $id);
+  public function groupLoad(mixed $id);
+
+  /**
+   * Load Group Content by id.
+   *
+   * @param mixed $id
+   *   Group Content ID.
+   *
+   * @return mixed
+   *   Group Content entity or NULL.
+   */
+  public function groupContentLoad(mixed $id);
+
+  /**
+   * Load Group Content entity by pair Group + User.
+   *
+   * @param mixed $group
+   *   You can pass Group entity or Group ID.
+   * @param mixed $user
+   *   You can pass User entity or User ID.
+   *
+   * @return mixed
+   *   Group Content entity or NULL.
+   */
+  public function groupContentLoadByEndpointsUser(mixed $group, mixed $user);
+
+  /**
+   * Load Group Content entity by pair Group + current user.
+   *
+   * @param mixed $group
+   *   You can pass Group entity or Group ID.
+   *
+   * @return mixed
+   *   Group Content entity or NULL.
+   */
+  public function groupContentLoadByEndpointsCurrentUser(mixed $group);
+
+  /**
+   * Load Group Content entity by pair Group + Contact.
+   *
+   * @param mixed $group
+   *   You can pass Group entity or Group ID.
+   * @param mixed $contact
+   *   You can pass Redhen Contact entity or Contact ID.
+   *
+   * @return mixed
+   *   Group Content entity or NULL.
+   */
+  public function groupContentLoadByEndpointsContact(mixed $group, mixed $contact);
+
+  /**
+   * Load all existed Group Content entities for passed user.
+   *
+   * @param mixed $user
+   *   You can pass User entity or User ID.
+   *
+   * @return mixed
+   *   Group Content entities array or NULL.
+   */
+  public function groupContentsLoadByUser(mixed $user);
+
+  /**
+   * Load all existed Group Content entities for current user.
+   *
+   * @return mixed
+   *   Group Content entities array or NULL.
+   */
+  public function groupContentsLoadByCurrentUser();
+
+  /**
+   * Load all existed Group Content entities for passed Redhen Contact.
+   *
+   * @param mixed $contact
+   *   You can pass Redhen Contact entity or Contact ID.
+   *
+   * @return mixed
+   *   Group Content entities array or NULL.
+   */
+  public function groupContentsLoadByContact(mixed $contact);
 
   /**
    * Get SF ID string by Entity object.

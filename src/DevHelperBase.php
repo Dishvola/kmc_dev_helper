@@ -12,7 +12,11 @@ use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Messenger\MessengerInterface;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\group\Entity\Group;
 use Drupal\group\Entity\GroupContent;
+use Drupal\group\Entity\GroupInterface;
+use Drupal\group\GroupMembership;
 use Drupal\group\GroupMembershipLoaderInterface;
 use Drupal\redhen_connection\ConnectionServiceInterface;
 use Drupal\redhen_connection\Entity\Connection;
@@ -385,13 +389,121 @@ class DevHelperBase extends \Drupal implements DevHelperInterface, ContainerInje
   /**
    * {@inheritdoc}
    */
-  public function connectionGroupLoad(mixed $id) {
+  public function groupLoad(mixed $id) {
+    $group = NULL;
+    if (is_numeric($id)) {
+      $group = Group::load($id);
+    }
+
+    return $group;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function groupContentLoad(mixed $id) {
     $group_content = NULL;
     if (is_numeric($id)) {
       $group_content = GroupContent::load($id);
     }
 
     return $group_content;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function groupContentLoadByEndpointsUser(mixed $group, mixed $user) {
+    $group_content = NULL;
+    if (is_numeric($user)) {
+      $user = self::userLoad($user);
+    }
+    if (is_numeric($group)) {
+      $group = self::groupLoad($group);
+    }
+
+    if ($group instanceof GroupInterface && $user instanceof AccountInterface) {
+      $group_membership = $this->groupMembershipLoader->load($group, $user);
+      // GroupMembership is a wrapper class for a GroupContent entity
+      // representing a membership.
+      if ($group_membership instanceof GroupMembership) {
+        $group_content = $group_membership->getGroupContent();
+      }
+    }
+
+    return $group_content;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function groupContentLoadByEndpointsCurrentUser(mixed $group) {
+    $user = self::currentUser();
+
+    return $this->groupContentLoadByEndpointsUser($group, $user);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function groupContentLoadByEndpointsContact(mixed $group, mixed $contact) {
+    $user = NULL;
+    if (is_numeric($contact)) {
+      $contact = self::contactLoad($contact);
+    }
+    if ($contact instanceof ContactInterface) {
+      $user = $contact->getUser();
+    }
+
+    return $user instanceof AccountInterface ? $this->groupContentLoadByEndpointsUser($group, $user) : NULL;
+  }
+
+  /**
+   * @inheritDoc
+   */
+  public function groupContentsLoadByUser(mixed $user) {
+    $group_contents = [];
+    if (is_numeric($user)) {
+      $user = self::userLoad($user);
+    }
+
+    if ($user instanceof AccountInterface) {
+      $group_memberships = $this->groupMembershipLoader->loadByUser($user);
+
+      if (!empty($group_memberships)) {
+        foreach ($group_memberships as $group_membership) {
+          if ($group_membership instanceof GroupMembership) {
+            $group_contents[] = $group_membership->getGroupContent();
+          }
+        }
+      }
+    }
+
+    return $group_contents;
+  }
+
+  /**
+   * @inheritDoc
+   */
+  public function groupContentsLoadByCurrentUser() {
+    $user = self::currentUser();
+
+    return $this->groupContentsLoadByUser($user);
+  }
+
+  /**
+   * @inheritDoc
+   */
+  public function groupContentsLoadByContact(mixed $contact) {
+    $user = NULL;
+    if (is_numeric($contact)) {
+      $contact = self::contactLoad($contact);
+    }
+    if ($contact instanceof ContactInterface) {
+      $user = $contact->getUser();
+    }
+
+    return $user instanceof AccountInterface ? $this->groupContentsLoadByUser($user) : [];
   }
 
   /**
