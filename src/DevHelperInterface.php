@@ -209,6 +209,36 @@ interface DevHelperInterface {
   public function groupLoad(mixed $id);
 
   /**
+   * Load all existed Group entities for passed user.
+   *
+   * @param mixed $user
+   *   You can pass User entity or User ID.
+   *
+   * @return mixed
+   *   Group entities array or NULL.
+   */
+  public function groupsLoadByUser(mixed $user);
+
+  /**
+   * Load all existed Group entities for current user.
+   *
+   * @return mixed
+   *   Group entities array or NULL.
+   */
+  public function groupsLoadByCurrentUser();
+
+  /**
+   * Load all existed Group entities for passed Redhen Contact.
+   *
+   * @param mixed $contact
+   *   You can pass Redhen Contact entity or Contact ID.
+   *
+   * @return mixed
+   *   Group entities array or NULL.
+   */
+  public function groupsLoadByContact(mixed $contact);
+
+  /**
    * Load Group Content by id.
    *
    * @param mixed $id

@@ -256,6 +256,7 @@ class DevHelperBase extends \Drupal implements DevHelperInterface, ContainerInje
    */
   public function contactLoadCurrent() {
     $current_user = self::currentUser();
+
     return $current_user->isAuthenticated() ? Contact::loadByUser($current_user) : FALSE;
   }
 
@@ -396,6 +397,48 @@ class DevHelperBase extends \Drupal implements DevHelperInterface, ContainerInje
     }
 
     return $group;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function groupsLoadByUser(mixed $user) {
+    $groups = [];
+    $group_contents = $this->groupContentsLoadByUser($user);
+
+    if (!empty($group_contents)) {
+      foreach ($group_contents as $group_content) {
+        if ($group_content instanceof GroupContent) {
+          $groups[] = $group_content->getGroup();
+        }
+      }
+    }
+
+    return $groups;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function groupsLoadByCurrentUser() {
+    $user = self::currentUser();
+
+    return $this->groupsLoadByUser($user);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function groupsLoadByContact(mixed $contact) {
+    $user = NULL;
+    if (is_numeric($contact)) {
+      $contact = self::contactLoad($contact);
+    }
+    if ($contact instanceof ContactInterface) {
+      $user = $contact->getUser();
+    }
+
+    return $user instanceof AccountInterface ? $this->groupsLoadByUser($user) : [];
   }
 
   /**
