@@ -229,14 +229,9 @@ class DevHelperBase extends \Drupal implements DevHelperInterface, ContainerInje
    * @inheritDoc
    */
   public function orgCurrentGetConnectedEntities() {
-    $contact_connections = [];
     $org = self::orgLoadCurrent();
 
-    if ($org instanceof OrgInterface) {
-      $contact_connections = $this->connectionService->getConnectedEntities($org, 'organizational_affiliation');
-    }
-
-    return $contact_connections;
+    return $this->orgGetConnectedEntities($org);
   }
 
   /**
@@ -281,14 +276,9 @@ class DevHelperBase extends \Drupal implements DevHelperInterface, ContainerInje
    * @inheritDoc
    */
   public function contactCurrentGetConnectedEntities() {
-    $contact_connections = [];
     $contact = self::contactLoadCurrent();
 
-    if ($contact instanceof ContactInterface) {
-      $contact_connections = $this->connectionService->getConnectedEntities($contact, 'organizational_affiliation');
-    }
-
-    return $contact_connections;
+    return $this->contactGetConnectedEntities($contact);
   }
 
   /**
@@ -346,14 +336,9 @@ class DevHelperBase extends \Drupal implements DevHelperInterface, ContainerInje
    * @inheritDoc
    */
   public function connectionsRedhenLoadByCurrentContact(bool $active = TRUE) {
-    $contact_connections = [];
     $contact = self::contactLoadCurrent();
 
-    if ($contact instanceof ContactInterface) {
-      $contact_connections = $this->connectionService->getConnections($contact, NULL, 'organizational_affiliation', $active);
-    }
-
-    return $contact_connections;
+    return $this->connectionsRedhenLoadByContact($contact, $active);
   }
 
   /**
@@ -377,14 +362,9 @@ class DevHelperBase extends \Drupal implements DevHelperInterface, ContainerInje
    * @inheritDoc
    */
   public function connectionsRedhenLoadByCurrentOrg(bool $active = TRUE) {
-    $contact_connections = [];
     $org = self::orgLoadCurrent();
 
-    if ($org instanceof OrgInterface) {
-      $contact_connections = $this->connectionService->getConnections($org, NULL, 'organizational_affiliation', $active);
-    }
-
-    return $contact_connections;
+    return $this->connectionsRedhenLoadByOrg($org, $active);
   }
 
   /**
