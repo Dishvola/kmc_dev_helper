@@ -13,6 +13,7 @@ use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\group\Entity\GroupContent;
+use Drupal\group\GroupMembershipLoaderInterface;
 use Drupal\redhen_connection\ConnectionServiceInterface;
 use Drupal\redhen_connection\Entity\Connection;
 use Drupal\redhen_contact\ContactInterface;
@@ -85,6 +86,13 @@ class DevHelperBase extends \Drupal implements DevHelperInterface, ContainerInje
   public ConnectionServiceInterface $connectionService;
 
   /**
+   * The Group Membership Loader service.
+   *
+   * @var \Drupal\group\GroupMembershipLoaderInterface
+   */
+  public GroupMembershipLoaderInterface $groupMembershipLoader;
+
+  /**
    * Constructs a Dev Helper Base.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_manager
@@ -101,15 +109,18 @@ class DevHelperBase extends \Drupal implements DevHelperInterface, ContainerInje
    *   The Redhen Connections service.
    * @param \Drupal\redhen_connection\ConnectionServiceInterface $connectionService
    *   The cache factory service.
+   * @param \Drupal\group\GroupMembershipLoaderInterface $groupMembershipLoader
+   *   The Group Membership Loader service.
    */
   public function __construct(
-    EntityTypeManagerInterface    $entity_manager,
-    ConfigFactoryInterface        $config_factory,
-    MessengerInterface            $messenger,
-    LoggerChannelFactoryInterface $logger_factory,
-    ModuleHandlerInterface        $moduleHandler,
-    CacheFactoryInterface         $cacheFactory,
-    ConnectionServiceInterface    $connectionService,
+    EntityTypeManagerInterface     $entity_manager,
+    ConfigFactoryInterface         $config_factory,
+    MessengerInterface             $messenger,
+    LoggerChannelFactoryInterface  $logger_factory,
+    ModuleHandlerInterface         $moduleHandler,
+    CacheFactoryInterface          $cacheFactory,
+    ConnectionServiceInterface     $connectionService,
+    GroupMembershipLoaderInterface $groupMembershipLoader,
   ) {
     $this->entityTypeManager = $entity_manager;
     $this->configFactory = $config_factory;
@@ -119,6 +130,7 @@ class DevHelperBase extends \Drupal implements DevHelperInterface, ContainerInje
     $this->moduleHandler = $moduleHandler;
     $this->cacheFactory = $cacheFactory;
     $this->connectionService = $connectionService;
+    $this->groupMembershipLoader = $groupMembershipLoader;
   }
 
   /**
@@ -133,6 +145,7 @@ class DevHelperBase extends \Drupal implements DevHelperInterface, ContainerInje
       $container->get('module_handler'),
       $container->get('cache_factory'),
       $container->get('redhen_connection.connections'),
+      $container->get('group.membership_loader'),
     );
   }
 
@@ -158,6 +171,7 @@ class DevHelperBase extends \Drupal implements DevHelperInterface, ContainerInje
     if (is_numeric($id)) {
       $user = User::load($id);
     }
+
     return $user;
   }
 
@@ -169,6 +183,7 @@ class DevHelperBase extends \Drupal implements DevHelperInterface, ContainerInje
     if (is_numeric($id)) {
       $org = Org::load($id);
     }
+
     return $org;
   }
 
@@ -228,6 +243,7 @@ class DevHelperBase extends \Drupal implements DevHelperInterface, ContainerInje
     if (is_numeric($id)) {
       $contact = Contact::load($id);
     }
+
     return $contact;
   }
 
@@ -278,6 +294,7 @@ class DevHelperBase extends \Drupal implements DevHelperInterface, ContainerInje
     if (is_numeric($id)) {
       $connection = Connection::load($id);
     }
+
     return $connection;
   }
 
@@ -369,11 +386,12 @@ class DevHelperBase extends \Drupal implements DevHelperInterface, ContainerInje
    * {@inheritdoc}
    */
   public function connectionGroupLoad(mixed $id) {
-    $contact = NULL;
+    $group_content = NULL;
     if (is_numeric($id)) {
-      $contact = GroupContent::load($id);
+      $group_content = GroupContent::load($id);
     }
-    return $contact;
+
+    return $group_content;
   }
 
   /**

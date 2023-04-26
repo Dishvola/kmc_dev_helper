@@ -5,4 +5,5 @@ core_version_requirement: ^9 || ^10
 package: KMC
 dependencies:
   - redhen_connection
+  - group
   - salesforce_mapping
