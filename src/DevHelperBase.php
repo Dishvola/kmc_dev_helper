@@ -170,6 +170,36 @@ class DevHelperBase extends \Drupal implements DevHelperInterface, ContainerInje
   /**
    * {@inheritdoc}
    */
+  public function userIsGroupMember(mixed $group, mixed $user = NULL) {
+    if (!isset($user)) {
+      $user = self::currentUser();
+    }
+
+    return (bool) $this->groupContentLoadByEndpointsUser($group, $user);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function userIsOrgMember(mixed $org, mixed $user = NULL) {
+    $contact = NULL;
+    if (!isset($user)) {
+      $user = self::currentUser();
+    }
+    elseif (is_numeric($user)) {
+      $user = self::userLoad($user);
+    }
+
+    if ($user instanceof AccountInterface) {
+      $contact = Contact::loadByUser($user);
+    }
+
+    return $contact instanceof Contact && $this->connectionRedhenLoadByEndpoints($contact, $org);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function userLoad(mixed $id) {
     $user = NULL;
     if (is_numeric($id)) {
@@ -232,6 +262,28 @@ class DevHelperBase extends \Drupal implements DevHelperInterface, ContainerInje
     $org = self::orgLoadCurrent();
 
     return $this->orgGetConnectedEntities($org);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function contactIsGroupMember(mixed $group, mixed $contact = NULL) {
+    if (!isset($contact)) {
+      $contact = self::contactLoadCurrent();
+    }
+
+    return (bool) $this->groupContentLoadByEndpointsContact($group, $contact);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function contactIsOrgMember(mixed $org, mixed $contact = NULL) {
+    if (!isset($contact)) {
+      $contact = self::contactLoadCurrent();
+    }
+
+    return (bool) $this->connectionRedhenLoadByEndpoints($contact, $org);
   }
 
   /**

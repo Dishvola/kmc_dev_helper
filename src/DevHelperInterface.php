@@ -34,6 +34,36 @@ interface DevHelperInterface {
   public function getConfig(string $name): ImmutableConfig;
 
   /**
+   * Determine the User is Group member or not by pair of the Group + User.
+   *
+   * @param mixed $group
+   *   You can pass Group entity or Group ID.
+   * @param mixed $user
+   *   (optional) You can pass User entity or User ID. Leave blank to check the
+   *   currently logged-in user.
+   *
+   * @return bool
+   *   TRUE when User is Group member, FALSE otherwise.
+   */
+  public function userIsGroupMember(mixed $group, mixed $user = NULL);
+
+  /**
+   * Determine the User is Org member by pair Org + User.
+   *
+   * Org Member meaning the User Contact has active connection with passed Org.
+   *
+   * @param mixed $org
+   *   You can pass Redhen Org entity or Org ID.
+   * @param mixed $user
+   *   (optional) You can pass User entity or User ID. Leave blank to check the
+   *   currently logged-in user Contact.
+   *
+   * @return bool
+   *   TRUE when User Contact is Org member, FALSE otherwise.
+   */
+  public function userIsOrgMember(mixed $org, mixed $user = NULL);
+
+  /**
    * Load Drupal User by id.
    *
    * @param mixed $id
@@ -84,6 +114,36 @@ interface DevHelperInterface {
    *   Return Contacts entities or empty array.
    */
   public function orgCurrentGetConnectedEntities();
+
+  /**
+   * Determine the Redhen Contact is Group member by pair Group + Contact.
+   *
+   * @param mixed $group
+   *   You can pass Group entity or Group ID.
+   * @param mixed $contact
+   *   (optional) You can pass Redhen Contact entity or User ID. Leave blank
+   *   to check the currently logged-in user Contact.
+   *
+   * @return bool
+   *   TRUE when Contact is Group member, FALSE otherwise.
+   */
+  public function contactIsGroupMember(mixed $group, mixed $contact = NULL);
+
+  /**
+   * Determine the Redhen Contact is Org member by pair Org + Contact.
+   *
+   * Org Member meaning the Contact has active connection with passed Org.
+   *
+   * @param mixed $org
+   *   You can pass Redhen Org entity or Org ID.
+   * @param mixed $contact
+   *   (optional) You can pass Redhen Contact entity or User ID. Leave blank
+   *   to check the currently logged-in user Contact.
+   *
+   * @return bool
+   *   TRUE when Contact is Org member, FALSE otherwise.
+   */
+  public function contactIsOrgMember(mixed $org, mixed $contact = NULL);
 
   /**
    * Load Redhen Contact by id.
