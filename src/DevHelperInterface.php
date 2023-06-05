@@ -34,6 +34,18 @@ interface DevHelperInterface {
   public function getConfig(string $name): ImmutableConfig;
 
   /**
+   * Determine the current site has Salesforce active connection.
+   *
+   * Wrap your SF requests into this like "if ($dev_helper->sfClientIsInit()) {"
+   * to get rid of "RestClient is not initialized." error and show
+   * special message to the Staff users.
+   *
+   * @return bool
+   *   TRUE when initialized, FALSE otherwise.
+   */
+  public function sfClientIsInit();
+
+  /**
    * Determine the User has one of the Staff roles or not.
    *
    * The roles list 'staff', 'staff_admin', 'advanced_admin' or 'administrator'.

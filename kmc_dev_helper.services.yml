@@ -1,4 +1,4 @@
 services:
   kmc_dev_helper.base:
     class: Drupal\kmc_dev_helper\DevHelperBase
-    arguments: ['@entity_type.manager', '@config.factory', '@messenger', '@logger.factory', '@module_handler', '@cache_factory', '@redhen_connection.connections', '@group.membership_loader']
+    arguments: ['@entity_type.manager', '@config.factory', '@messenger', '@logger.factory', '@module_handler', '@cache_factory', '@redhen_connection.connections', '@group.membership_loader', '@salesforce.client']

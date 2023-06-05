@@ -25,8 +25,11 @@ use Drupal\redhen_contact\ContactInterface;
 use Drupal\redhen_contact\Entity\Contact;
 use Drupal\redhen_org\Entity\Org;
 use Drupal\redhen_org\OrgInterface;
+use Drupal\salesforce\Rest\RestClient;
+use Drupal\salesforce\SObject;
 use Drupal\salesforce_mapping\Entity\MappedObject;
 use Drupal\user\Entity\User;
+use Drupal\webform\Entity\WebformSubmission;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -98,6 +101,13 @@ class DevHelperBase extends \Drupal implements DevHelperInterface, ContainerInje
   public GroupMembershipLoaderInterface $groupMembershipLoader;
 
   /**
+   * Salesforce Client.
+   *
+   * @var \Drupal\salesforce\Rest\RestClient
+   */
+  public RestClient $sfClient;
+
+  /**
    * Constructs a Dev Helper Base.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_manager
@@ -116,6 +126,8 @@ class DevHelperBase extends \Drupal implements DevHelperInterface, ContainerInje
    *   The cache factory service.
    * @param \Drupal\group\GroupMembershipLoaderInterface $groupMembershipLoader
    *   The Group Membership Loader service.
+   * @param \Drupal\salesforce\Rest\RestClient $sfClient
+   *   Salesforce Client.
    */
   public function __construct(
     EntityTypeManagerInterface     $entity_manager,
@@ -126,6 +138,7 @@ class DevHelperBase extends \Drupal implements DevHelperInterface, ContainerInje
     CacheFactoryInterface          $cacheFactory,
     ConnectionServiceInterface     $connectionService,
     GroupMembershipLoaderInterface $groupMembershipLoader,
+    RestClient                     $sfClient,
   ) {
     $this->entityTypeManager = $entity_manager;
     $this->configFactory = $config_factory;
@@ -136,6 +149,7 @@ class DevHelperBase extends \Drupal implements DevHelperInterface, ContainerInje
     $this->cacheFactory = $cacheFactory;
     $this->connectionService = $connectionService;
     $this->groupMembershipLoader = $groupMembershipLoader;
+    $this->sfClient = $sfClient;
   }
 
   /**
@@ -151,6 +165,7 @@ class DevHelperBase extends \Drupal implements DevHelperInterface, ContainerInje
       $container->get('cache_factory'),
       $container->get('redhen_connection.connections'),
       $container->get('group.membership_loader'),
+      $container->get('salesforce.client'),
     );
   }
 
@@ -166,6 +181,20 @@ class DevHelperBase extends \Drupal implements DevHelperInterface, ContainerInje
    */
   public function getConfig($name): ImmutableConfig {
     return self::config($name);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function sfClientIsInit() {
+    $sf_is_connected = $this->sfClient->isInit();
+
+    // Show message to staff when disconnected.
+    if (!$sf_is_connected && $this->userIsStaff()) {
+      $this->messenger->addWarning('Salesforce RestClient is not initialized. Please check SF connection settings.');
+    }
+
+    return $sf_is_connected;
   }
 
   /**
