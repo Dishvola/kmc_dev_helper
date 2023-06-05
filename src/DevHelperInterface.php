@@ -34,6 +34,20 @@ interface DevHelperInterface {
   public function getConfig(string $name): ImmutableConfig;
 
   /**
+   * Determine the User has one of the Staff roles or not.
+   *
+   * The roles list 'staff', 'staff_admin', 'advanced_admin' or 'administrator'.
+   *
+   * @param mixed $user
+   *   (optional) You can pass User entity or User ID. Leave blank to check the
+   *   currently logged-in user.
+   *
+   * @return bool
+   *   TRUE when User has Staff+ role, FALSE otherwise.
+   */
+  public function userIsStaff(mixed $user = NULL);
+
+  /**
    * Determine the User is Group member or not by pair of the Group + User.
    *
    * @param mixed $group

@@ -13,6 +13,7 @@ use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Logger\LoggerChannelInterface;
 use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\group\Entity\Group;
 use Drupal\group\Entity\GroupContent;
 use Drupal\group\Entity\GroupInterface;
@@ -165,6 +166,35 @@ class DevHelperBase extends \Drupal implements DevHelperInterface, ContainerInje
    */
   public function getConfig($name): ImmutableConfig {
     return self::config($name);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function userIsStaff(mixed $user = NULL) {
+    $is_staff = FALSE;
+
+    // Get user.
+    if (!isset($user)) {
+      $user = self::currentUser();
+    }
+    elseif (is_numeric($user)) {
+      $user = self::userLoad($user);
+    }
+
+    // Staff+ roles list.
+    $staff_roles = [
+      'staff',
+      'staff_admin',
+      'advanced_admin',
+      'administrator',
+    ];
+
+    if ($user instanceof AccountProxyInterface) {
+      $is_staff = !empty(array_intersect($staff_roles, $user->getRoles()));
+    }
+
+    return $is_staff;
   }
 
   /**
