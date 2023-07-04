@@ -123,6 +123,17 @@ interface DevHelperInterface {
   public function orgLoadCurrent();
 
   /**
+   * Get Org from Contact field_account (alias contactGetOrg()).
+   *
+   * @param mixed $contact
+   *   You can pass Redhen Contact entity or Redhen Contact ID.
+   *
+   * @return mixed
+   *   Return Org entity or NULL.
+   */
+  public function orgGetByContact(mixed $contact);
+
+  /**
    * Load Contacts from org connections (organizational_affiliation).
    *
    * @param mixed $org
@@ -189,6 +200,17 @@ interface DevHelperInterface {
    *   Contact or FALSE if not found.
    */
   public function contactLoadCurrent();
+
+  /**
+   * Get Org from Contact field_account (alias orgGetByContact()).
+   *
+   * @param mixed $contact
+   *   You can pass Redhen Contact entity or Redhen Contact ID.
+   *
+   * @return mixed
+   *   Return Org entity or NULL.
+   */
+  public function contactGetOrg(mixed $contact);
 
   /**
    * Load Orgs from contact connections (organizational_affiliation).

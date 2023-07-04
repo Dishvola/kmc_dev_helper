@@ -284,17 +284,16 @@ class DevHelperBase extends \Drupal implements DevHelperInterface, ContainerInje
    * @inheritDoc
    */
   public function orgLoadCurrent() {
-    $org = NULL;
     $contact = self::contactLoadCurrent();
 
-    if ($contact instanceof Contact
-      && $contact->hasField('field_account')
-      && !$contact->get('field_account')->isEmpty()
-    ) {
-      $org = $contact->field_account->entity;
-    }
+    return self::contactGetOrg($contact);
+  }
 
-    return $org;
+  /**
+   * @inheritDoc
+   */
+  public function orgGetByContact($contact) {
+    return self::contactGetOrg($contact);
   }
 
   /**
@@ -364,6 +363,25 @@ class DevHelperBase extends \Drupal implements DevHelperInterface, ContainerInje
     $current_user = self::currentUser();
 
     return $current_user->isAuthenticated() ? Contact::loadByUser($current_user) : FALSE;
+  }
+
+  /**
+   * @inheritDoc
+   */
+  public function contactGetOrg(mixed $contact) {
+    $org = NULL;
+    if (is_numeric($contact)) {
+      $contact = self::contactLoad($contact);
+    }
+
+    if ($contact instanceof Contact
+      && $contact->hasField('field_account')
+      && !$contact->get('field_account')->isEmpty()
+    ) {
+      $org = $contact->field_account->entity;
+    }
+
+    return $org;
   }
 
   /**
